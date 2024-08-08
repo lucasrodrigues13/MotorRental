@@ -1,0 +1,6 @@
+@MotorRental.WebApi_HostAddress = http://localhost:5200
+
+GET {{MotorRental.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
