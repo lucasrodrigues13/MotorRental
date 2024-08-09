@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MotorRental.Application.Interfaces;
 using MotorRental.Domain.Dtos;
 using MotorRental.Domain.Entities;
@@ -11,14 +10,17 @@ namespace MotorRental.WebApi.Controllers
     public class MotorcycleController : ControllerBase
     {
         private readonly IMotorcycleService _service;
-        public MotorcycleController(IMotorcycleService service)
+        private readonly ILogger<MotorcycleController> _logger;
+        public MotorcycleController(IMotorcycleService service, ILogger<MotorcycleController> logger)
         {
             _service = service;
+            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult GetAll([FromQuery] GetMotorcyclesFilterDto getMotorcyclesFilterDto)
         {
+            _logger.LogInformation("Getting motorcycles...");
             return Ok(_service.GetAll());
         }
 
@@ -39,6 +41,14 @@ namespace MotorRental.WebApi.Controllers
         public async Task<IActionResult> UpdateLicensePlate(UpdateLicensePlateRequest updateLicensePlateRequest)
         {
             await _service.UpdateLicensePlate(updateLicensePlateRequest);
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _service.DeleteByIdAsync(id);
 
             return Ok();
         }

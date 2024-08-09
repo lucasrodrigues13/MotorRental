@@ -11,7 +11,7 @@ namespace MotorRental.Domain.Entities
 
         [Key]
         public int Id { get; set; }
-        public DateTime Created { get; set; }
+        public DateTime Created { get; }
 
         public Guid? CreatedBy { get; set; }
 

@@ -2,7 +2,7 @@
 
 namespace MotorRental.Domain.Entities
 {
-    public class Plan
+    public class Plan : BaseEntity
     {
         /// <summary>
         /// Period in days that the plan will last
