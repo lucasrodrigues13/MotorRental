@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MotorRental.Domain.Entities;
+using MotorRental.Infrastructure.Configurations;
 
 namespace MotorRental.Infrastructure.Data
 {
@@ -16,6 +17,12 @@ namespace MotorRental.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.ApplyConfiguration(new DeliverDriverConfiguration());
+            builder.ApplyConfiguration(new MotorcycleConfiguration());
+            builder.ApplyConfiguration(new PlanConfiguration());
+            builder.ApplyConfiguration(new RentalConfiguration());
+
+            builder.Entity<IdentityUserLogin<string>>().HasNoKey();
 
             builder.Entity<IdentityRole>().HasData(
                 new IdentityRole
@@ -38,7 +45,7 @@ namespace MotorRental.Infrastructure.Data
                 UserName = "admin",
                 NormalizedUserName = "ADMIN",
                 Email = "admin@motorrental.com",
-                NormalizedEmail = "ADMIN@motorrental.COM",
+                NormalizedEmail = "ADMIN@MOTORRENTAL.COM",
                 EmailConfirmed = true,
                 PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "AdminPassword123!")
             };
