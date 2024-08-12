@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MotorRental.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240808225702_InitialMotorRental")]
-    partial class InitialMotorRental
+    [Migration("20240812010107_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,20 @@ namespace MotorRental.Infrastructure.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "admin-role-id",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "driver-role-id",
+                            Name = "DeliverDriver",
+                            NormalizedName = "DELIVERDRIVER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -138,6 +152,24 @@ namespace MotorRental.Infrastructure.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "admin-user-id",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "ed95d78b-96d8-4402-b0f0-3ef084636d9e",
+                            Email = "admin@motorrental.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@MOTORRENTAL.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAIAAYagAAAAENf/dgrjXudMdCeIeepUcFlPkXz7M9DLzU8wKOBqhRPJBUValln6K1AZtFw4KUj1Sw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "4bd6661f-45d3-45ba-a694-ba4f4cdc0322",
+                            TwoFactorEnabled = false,
+                            UserName = "admin"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -200,6 +232,13 @@ namespace MotorRental.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "admin-user-id",
+                            RoleId = "admin-role-id"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -230,39 +269,57 @@ namespace MotorRental.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("BirthDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
                     b.Property<string>("Cnpj")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(14)
+                        .HasColumnType("character varying(14)");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("IdentityUserId")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
-                    b.Property<Guid?>("LastModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
 
                     b.Property<string>("LicenseDriverImagePath")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<long>("LicenseDriverNumber")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("LicenseDriverType")
-                        .HasColumnType("integer");
+                    b.Property<string>("LicenseDriverType")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("character varying(2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Cnpj")
+                        .IsUnique();
+
+                    b.HasIndex("LicenseDriverNumber")
+                        .IsUnique();
 
                     b.ToTable("DeliveryDrivers");
                 });
@@ -276,29 +333,34 @@ namespace MotorRental.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
-                    b.Property<Guid?>("LastModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
 
                     b.Property<string>("LicensePlate")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("Model")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<int>("Year")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LicensePlate")
+                        .IsUnique();
 
                     b.ToTable("Motorcycles");
                 });
@@ -312,26 +374,69 @@ namespace MotorRental.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
 
                     b.Property<decimal>("DailyPrice")
                         .HasColumnType("numeric");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
-                    b.Property<Guid?>("LastModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
 
                     b.Property<int>("NumberOfDays")
+                        .HasMaxLength(200)
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.ToTable("Plans");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Created = new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3844),
+                            CreatedBy = "admin-user-id",
+                            DailyPrice = 30m,
+                            NumberOfDays = 7
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Created = new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3863),
+                            CreatedBy = "admin-user-id",
+                            DailyPrice = 28m,
+                            NumberOfDays = 15
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Created = new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3865),
+                            CreatedBy = "admin-user-id",
+                            DailyPrice = 22m,
+                            NumberOfDays = 30
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Created = new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3866),
+                            CreatedBy = "admin-user-id",
+                            DailyPrice = 20m,
+                            NumberOfDays = 45
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Created = new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3867),
+                            CreatedBy = "admin-user-id",
+                            DailyPrice = 18m,
+                            NumberOfDays = 50
+                        });
                 });
 
             modelBuilder.Entity("MotorRental.Domain.Entities.Rental", b =>
@@ -343,29 +448,41 @@ namespace MotorRental.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DeliverDriverId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("EndDate")
-                        .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
                     b.Property<DateTime?>("ExpectedEndDate")
-                        .IsRequired()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
-                    b.Property<Guid?>("LastModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<int>("MotorcycleId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PlanId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MotorcycleId")
+                        .IsUnique();
+
+                    b.HasIndex("PlanId");
 
                     b.ToTable("Rentals");
                 });
@@ -419,6 +536,50 @@ namespace MotorRental.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MotorRental.Domain.Entities.Rental", b =>
+                {
+                    b.HasOne("MotorRental.Domain.Entities.DeliverDriver", "DeliverDriver")
+                        .WithOne("Rental")
+                        .HasForeignKey("MotorRental.Domain.Entities.Rental", "MotorcycleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MotorRental.Domain.Entities.Motorcycle", "Motorcycle")
+                        .WithOne("Rental")
+                        .HasForeignKey("MotorRental.Domain.Entities.Rental", "MotorcycleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MotorRental.Domain.Entities.Plan", "Plan")
+                        .WithMany("Rentals")
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DeliverDriver");
+
+                    b.Navigation("Motorcycle");
+
+                    b.Navigation("Plan");
+                });
+
+            modelBuilder.Entity("MotorRental.Domain.Entities.DeliverDriver", b =>
+                {
+                    b.Navigation("Rental")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MotorRental.Domain.Entities.Motorcycle", b =>
+                {
+                    b.Navigation("Rental")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MotorRental.Domain.Entities.Plan", b =>
+                {
+                    b.Navigation("Rentals");
                 });
 #pragma warning restore 612, 618
         }

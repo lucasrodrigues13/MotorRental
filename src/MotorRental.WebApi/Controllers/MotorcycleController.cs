@@ -5,9 +5,10 @@ using MotorRental.Domain.Entities;
 
 namespace MotorRental.WebApi.Controllers
 {
+    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
-    public class MotorcycleController : ControllerBase
+    public class MotorcycleController : ApplicationControllerBase
     {
         private readonly IMotorcycleService _service;
         private readonly ILogger<MotorcycleController> _logger;
@@ -20,7 +21,6 @@ namespace MotorRental.WebApi.Controllers
         [HttpGet]
         public IActionResult GetAll([FromQuery] GetMotorcyclesFilterDto getMotorcyclesFilterDto)
         {
-            _logger.LogInformation("Getting motorcycles...");
             return Ok(_service.GetAll());
         }
 

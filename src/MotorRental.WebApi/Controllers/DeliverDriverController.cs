@@ -1,9 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MotorRental.Application.Interfaces;
+using MotorRental.Domain.Dtos;
+using System.Security.Claims;
 
 namespace MotorRental.WebApi.Controllers
 {
-    public class DeliverDriverController : Controller
+    //[Authorize(Roles = "Admin,DeliverDriver")]
+    [Route("api/[controller]")]
+    [ApiController]
+    public class DeliverDriverController : ApplicationControllerBase
     {
         private readonly IDeliverDriverService _driverService;
         public DeliverDriverController(IDeliverDriverService driverService)
@@ -11,10 +16,13 @@ namespace MotorRental.WebApi.Controllers
             _driverService = driverService;
         }
 
-        //[HttpPost]
-        //public IActionResult UploadLicenseDriverPhoto(IFormFile licenseDriverPhoto)
-        //{
+        [HttpPost("UploadLicenseDriverPhoto")]
+        public async Task<IActionResult> UploadLicenseDriverPhoto(UploadLicenseDriverPhotoDto uploadLicenseDriverPhotoDto)
+        {
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            await _driverService.UploadLicenseDriverPhotoAsync(uploadLicenseDriverPhotoDto, userEmail);
 
-        //}
+            return Ok();
+        }
     }
 }

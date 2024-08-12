@@ -38,7 +38,7 @@ namespace MotorRental.WebApi
                         ValidAudience = builder.Configuration["Jwt:Issuer"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                     };
-                });
+                }).AddCookie();
             builder.Services.AddSingleton<ILoggerProvider>(sp =>
             {
                 var logger = new LoggerConfiguration()

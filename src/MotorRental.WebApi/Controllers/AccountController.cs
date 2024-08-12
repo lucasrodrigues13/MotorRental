@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MotorRental.Application.Interfaces;
-using MotorRental.Application.Services;
-using MotorRental.Domain.Constants;
 using MotorRental.Domain.Dtos;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,7 +9,9 @@ using System.Text;
 
 namespace MotorRental.WebApi.Controllers
 {
-    public class AccountController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AccountController : ApplicationControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
@@ -32,49 +32,45 @@ namespace MotorRental.WebApi.Controllers
             _deliverDriverService = deliverDriverService;
         }
 
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
             var result = await RegisterUser(registerDto);
             if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
+                return BadRequest(result.Errors.Select(a => a.Description).ToList());
 
-            return Ok("User registered successfully");
+            return Ok();
         }
 
-        [HttpPost]
+        [HttpPost("RegisterDeliverDriver")]
         public async Task<IActionResult> RegisterDeliverDriver([FromBody] RegisterDeliverDriverDto registerDeliverDriverDto)
         {
             await _deliverDriverService.AddAsync(new Domain.Entities.DeliverDriver
             {
                 BirthDate = registerDeliverDriverDto.BirthDate,
+                Email = registerDeliverDriverDto.Email,
                 Cnpj = registerDeliverDriverDto.Cnpj,
                 FullName = registerDeliverDriverDto.FullName,
                 LicenseDriverNumber = registerDeliverDriverDto.LicenseDriverNumber,
                 LicenseDriverType = registerDeliverDriverDto.LicenseDriverType
             });
 
-            
-
             var result = await RegisterUser(new RegisterDto
             {
                 Password = registerDeliverDriverDto.Password,
                 Username = registerDeliverDriverDto.Username,
-                Role = Roles.DELIVER_DRIVER
+                Email = registerDeliverDriverDto.Email,
+                Role = Domain.Constants.MotorRentalIdentityConstants.DELIVER_DRIVER_ROLE_ID
             });
 
             if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
+                return BadRequest(result.Errors.Select(a => a.Description).ToList());
 
-            return Ok("User registered successfully");
+            return Ok();
         }
 
 
-        [HttpPost]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             var result = await _signInManager.PasswordSignInAsync(loginDto.Username, loginDto.Password, false, false);
@@ -104,14 +100,14 @@ namespace MotorRental.WebApi.Controllers
 
             return Ok(new
             {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiration = token.ValidTo
             });
         }
 
         private async Task<IdentityResult> RegisterUser(RegisterDto registerDto)
         {
-            var user = new IdentityUser { UserName = registerDto.Username };
+            var user = new IdentityUser { UserName = registerDto.Username, Email = registerDto.Email };
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
             if (result.Succeeded)

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Amazon.S3;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MotorRental.Domain.Interfaces;
 using MotorRental.Infrastructure.Data;
+using MotorRental.Infrastructure.ExternalServices;
 using MotorRental.Infrastructure.Repositories;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -20,14 +22,23 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequiredUniqueChars = 3;
                 options.Password.RequireUppercase = true;
+                options.User.RequireUniqueEmail = true;
+
             }).AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddSignInManager<SignInManager<IdentityUser>>()
+            .AddDefaultTokenProviders();
 
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IDeliverDriverRepository, DeliverDriverRepository>();
             services.AddScoped<IMotorcyleRepository, MotorcyleRepository>();
             services.AddScoped<IPlanRepository, PlanRepository>();
             services.AddScoped<IRentalRepository, RentalRepository>();
+
+            services.AddDefaultAWSOptions(configuration.GetAWSOptions());
+            services.AddAWSService<IAmazonS3>();
+            services.AddSingleton<IAwsS3Service, AwsS3Service>();
+            services.AddScoped<IMessagingService, RabbitMqService>();
 
             return services;
         }

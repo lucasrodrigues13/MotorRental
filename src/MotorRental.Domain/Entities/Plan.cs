@@ -7,9 +7,8 @@ namespace MotorRental.Domain.Entities
         /// <summary>
         /// Period in days that the plan will last
         /// </summary>
-        [Required]
         public int NumberOfDays { get; set; }
-        [Required]
         public decimal DailyPrice { get; set; }
+        public ICollection<Rental> Rentals { get; set; }
     }
 }
