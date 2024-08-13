@@ -5,6 +5,7 @@ using MotorRental.Domain.Constants;
 using MotorRental.Domain.Entities;
 using MotorRental.Infrastructure.Configuration;
 using MotorRental.Infrastructure.Configurations;
+using Microsoft.EntityFrameworkCore.Proxies;
 
 namespace MotorRental.Infrastructure.Data
 {
@@ -15,6 +16,11 @@ namespace MotorRental.Infrastructure.Data
         public DbSet<Motorcycle> Motorcycles { get; set; }
         public DbSet<Plan> Plans { get; set; }
         public DbSet<Rental> Rentals { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

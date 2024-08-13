@@ -9,6 +9,6 @@ namespace MotorRental.Domain.Entities
         /// </summary>
         public int NumberOfDays { get; set; }
         public decimal DailyPrice { get; set; }
-        public ICollection<Rental> Rentals { get; set; }
+        public virtual ICollection<Rental> Rentals { get; set; }
     }
 }

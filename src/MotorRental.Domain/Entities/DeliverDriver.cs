@@ -12,6 +12,6 @@ namespace MotorRental.Domain.Entities
         public string? LicenseDriverImagePath { get; set; }
         public string IdentityUserId { get; set; }
         public string Email { get; set; }
-        public Rental Rental { get; set; }
+        public virtual Rental Rental { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace MotorRental.Application.Services
 
         public async Task<ApiResponse> RentAMotorcycle(RentAMotorcycleDto rentAMotorcycleDto)
         {
-            var motorcycle = _motorcyleRepository.GetNextAvailableMotorcycle();
+            var motorcycle = await _motorcyleRepository.GetByIdAsync(rentAMotorcycleDto.MotorcycleId);
             var deliverDriver = await _deliverDriverRepository.GetByIdAsync(rentAMotorcycleDto.DeliverDriverId);
             var plan = await _planRepository.GetByIdAsync(rentAMotorcycleDto.PlanId);
             var errors = ValidRentAMotorcycle(rentAMotorcycleDto, deliverDriver, motorcycle, plan);
@@ -39,15 +39,16 @@ namespace MotorRental.Application.Services
 
             var rental = new Rental
             {
-                DeliverDriver = deliverDriver,
-                Plan = plan,
-                Motorcycle = motorcycle,
+                DeliverDriverId = deliverDriver.Id,
+                PlanId = plan.Id,
+                MotorcycleId = motorcycle.Id,
                 StartDate = rentAMotorcycleDto.StartDate,
                 ExpectedEndDate = rentAMotorcycleDto.StartDate.AddDays(plan.NumberOfDays),
                 ExpectedPrice = plan.NumberOfDays * plan.DailyPrice
             };
+            await _rentalRepository.AddAsync(rental);
 
-            return ApiResponse.Ok(await _rentalRepository.AddAsync(rental));
+            return ApiResponse.Ok();
         }
 
         public async Task<ApiResponse> InformEndDateRental(InformEndDateRentalDto informEndDateRentalDto)
@@ -79,14 +80,20 @@ namespace MotorRental.Application.Services
                 return errors;
             }
 
-            if (deliverDriver.LicenseDriverType == LicenseDriverTypeEnum.A || deliverDriver.LicenseDriverType == LicenseDriverTypeEnum.AB)
+            if (deliverDriver.LicenseDriverType != LicenseDriverTypeEnum.A && deliverDriver.LicenseDriverType != LicenseDriverTypeEnum.AB)
                 errors.Add(ErrorMessagesConstants.DELIVER_DRIVER_NOT_QUALIFIED);
 
-            if (deliverDriver.Rental != null && deliverDriver.Rental.EndDate == null && deliverDriver.Rental.EndDate >= DateTime.Now.Date)
+            if (deliverDriver.Rental != null && (deliverDriver.Rental.EndDate == null || deliverDriver.Rental.EndDate >= DateTime.Now.Date))
                 errors.Add(ErrorMessagesConstants.DELIVER_DRIVER_RENT_ACTIVE);
 
             if (motorcycle == null)
+            {
                 errors.Add(ErrorMessagesConstants.NO_MOTORCYCLE_AVAILABLE);
+                return errors;
+            }
+
+            if (motorcycle.Rental != null && (motorcycle.Rental.EndDate == null || motorcycle.Rental.EndDate >= DateTime.Now.Date))
+                errors.Add(ErrorMessagesConstants.MOTORCYCLE_RENT_ACTIVE);
 
             return errors;
         }

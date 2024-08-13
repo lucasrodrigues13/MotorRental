@@ -6,7 +6,7 @@
         public string Model { get; set; }
         public string LicensePlate { get; set; }
 
-        public Rental Rental { get; set; }
-        public MotorcycleNotification MotorcycleNotification { get; set; }
+        public virtual Rental Rental { get; set; }
+        public virtual MotorcycleNotification MotorcycleNotification { get; set; }
     }
 }

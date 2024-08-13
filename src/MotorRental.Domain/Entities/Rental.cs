@@ -15,8 +15,8 @@ namespace MotorRental.Domain.Entities
         public int MotorcycleId { get; set; }
 
 
-        public DeliverDriver DeliverDriver { get; set; }
-        public Plan Plan { get; set; }
-        public Motorcycle Motorcycle { get; set; }
+        public virtual DeliverDriver DeliverDriver { get; set; }
+        public virtual Plan Plan { get; set; }
+        public virtual Motorcycle Motorcycle { get; set; }
     }
 }

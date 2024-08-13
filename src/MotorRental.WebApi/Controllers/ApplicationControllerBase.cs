@@ -16,6 +16,10 @@ namespace MotorRental.WebApi.Controllers
         {
             return base.Ok(ApiResponse.Ok(value));
         }
+        protected OkObjectResult Ok(ApiResponse value)
+        {
+            return base.Ok(value);
+        }
 
         protected BadRequestObjectResult BadRequest(ApiResponse apiResponse)
         {

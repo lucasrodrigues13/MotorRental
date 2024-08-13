@@ -15,6 +15,7 @@
         public const string START_DATE_REQUIRED_INVALID = "The motorcycle rental start date is required and must be from today.";
 
         public const string NO_MOTORCYCLE_AVAILABLE = "There is no motorcycle available.";
+        public const string MOTORCYCLE_RENT_ACTIVE = "The motorcycle have a rent active.";
 
         public const string PLAN_NOT_REGISTERED = "The selected plan is not registered.";
 

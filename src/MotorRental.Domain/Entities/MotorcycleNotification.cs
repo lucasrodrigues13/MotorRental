@@ -7,6 +7,6 @@ namespace MotorRental.Domain.Entities
         [Key]
         public int Id { get; set; }
         public int MotorcycleId { get; set; }
-        public Motorcycle Motorcycle { get; set; }
+        public virtual Motorcycle Motorcycle { get; set; }
     }
 }
