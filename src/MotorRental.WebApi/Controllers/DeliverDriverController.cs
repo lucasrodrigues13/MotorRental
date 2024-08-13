@@ -11,18 +11,43 @@ namespace MotorRental.WebApi.Controllers
     public class DeliverDriverController : ApplicationControllerBase
     {
         private readonly IDeliverDriverService _driverService;
-        public DeliverDriverController(IDeliverDriverService driverService)
+        private readonly IRentalService _rentalService;
+        public DeliverDriverController(IDeliverDriverService driverService, IRentalService rentalService)
         {
             _driverService = driverService;
+            _rentalService = rentalService;
         }
 
         [HttpPost("UploadLicenseDriverPhoto")]
         public async Task<IActionResult> UploadLicenseDriverPhoto(UploadLicenseDriverPhotoDto uploadLicenseDriverPhotoDto)
         {
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
-            await _driverService.UploadLicenseDriverPhotoAsync(uploadLicenseDriverPhotoDto, userEmail);
+            var apiResponse = await _driverService.UploadLicenseDriverPhotoAsync(uploadLicenseDriverPhotoDto, "flucasrodrigues@hotmail.com");
 
-            return Ok();
+            if (!apiResponse.Success)
+                return BadRequest(apiResponse);
+
+            return Ok(apiResponse);
+        }
+
+        [HttpPut("RentAMotorcycle")]
+        public async Task<IActionResult> RentAMotorcycle(RentAMotorcycleDto rentAMotorcycleDto)
+        {
+            var apiResponse = await _rentalService.RentAMotorcycle(rentAMotorcycleDto);
+            if (!apiResponse.Success)
+                return BadRequest(apiResponse);
+
+            return Ok(apiResponse);
+        }
+
+        [HttpPut("InformEndDateRental")]
+        public async Task<IActionResult> InformEndDateRental(InformEndDateRentalDto informEndDateRentalDto)
+        {
+            var apiResponse = await _rentalService.InformEndDateRental(informEndDateRentalDto);
+            if (!apiResponse.Success)
+                return BadRequest(apiResponse);
+
+            return Ok(apiResponse);
         }
     }
 }

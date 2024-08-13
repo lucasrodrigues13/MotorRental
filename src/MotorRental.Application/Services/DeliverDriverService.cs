@@ -25,14 +25,15 @@ namespace MotorRental.Application.Services
                 errors.Add(ErrorMessagesConstants.DELIVER_DRIVER_NOT_REGISTERED);
 
             if (errors.Count > 0)
-                return ApiResponse.BadRequest(errors);
+                return new ApiResponse(false, ErrorMessagesConstants.BADREQUEST_DEFAULT, null, errors);
 
+            var imagePath = $"licenses/{userEmail}/{uploadLicenseDriverPhotoDto.DeliverDriverId}";
             using (var stream = uploadLicenseDriverPhotoDto.LicenseDriverPhoto.OpenReadStream())
             {
-                await _awsS3Service.UploadFileAsync(AwsConstants.S3_BUCKET_NAME,
-                $"licenses/{userEmail}/{uploadLicenseDriverPhotoDto.DeliverDriverId}",
-                stream);
+                await _awsS3Service.UploadFileAsync(AwsConstants.S3_BUCKET_NAME, imagePath, stream);
             }
+            driver.LicenseDriverImagePath = imagePath;
+            await _deliverDriverRepository.UpdateAsync(driver);
 
             return ApiResponse.Ok();
         }
@@ -48,7 +49,7 @@ namespace MotorRental.Application.Services
             }
 
             var fileExtension = Path.GetExtension(licenseDriverPhoto.FileName).ToLowerInvariant();
-            if (string.IsNullOrWhiteSpace(licenseDriverPhoto.FileName) || fileExtension == ".png" || fileExtension == ".bmp")
+            if (string.IsNullOrWhiteSpace(licenseDriverPhoto.FileName) || (fileExtension != ".png" && fileExtension != ".bmp"))
                 errors.Add(ErrorMessagesConstants.PHOTO_EXTENSION_INVALID);
 
             return errors;

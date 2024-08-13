@@ -22,7 +22,7 @@ namespace MotorRental.Infrastructure.Configurations
                    u => (LicenseDriverTypeEnum)Enum.Parse(typeof(LicenseDriverTypeEnum), u))
                .HasMaxLength(2);
 
-            builder.HasOne(u => u.Rental).WithOne(u => u.DeliverDriver).HasForeignKey<Rental>(u => u.MotorcycleId);
+            builder.HasOne(u => u.Rental).WithOne(u => u.DeliverDriver).HasForeignKey<Rental>(u => u.MotorcycleId).OnDelete(DeleteBehavior.SetNull);
 
             builder.HasIndex(u => u.Cnpj).IsUnique();
             builder.HasIndex(u => u.LicenseDriverNumber).IsUnique();

@@ -4,7 +4,11 @@ using MotorRental.Infrastructure.Data;
 
 namespace MotorRental.Infrastructure.Repositories
 {
-    public class DeliverDriverRepository(ApplicationDbContext context) : BaseRepository<DeliverDriver>(context), IDeliverDriverRepository
+    public class DeliverDriverRepository : BaseRepository<DeliverDriver>, IDeliverDriverRepository
     {
+        public DeliverDriverRepository(ApplicationDbContext context) : base(context)
+        {
+        }
+
     }
 }

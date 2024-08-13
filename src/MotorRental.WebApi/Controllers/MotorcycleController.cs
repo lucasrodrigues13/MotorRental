@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MotorRental.Application.Interfaces;
 using MotorRental.Domain.Dtos;
-using MotorRental.Domain.Entities;
 
 namespace MotorRental.WebApi.Controllers
 {
@@ -10,37 +9,35 @@ namespace MotorRental.WebApi.Controllers
     [ApiController]
     public class MotorcycleController : ApplicationControllerBase
     {
-        private readonly IMotorcycleService _service;
-        private readonly ILogger<MotorcycleController> _logger;
+        private readonly IMotorcycleService _motorcycleService;
         public MotorcycleController(IMotorcycleService service, ILogger<MotorcycleController> logger)
         {
-            _service = service;
-            _logger = logger;
+            _motorcycleService = service;
         }
 
         [HttpGet]
         public IActionResult GetAll([FromQuery] GetMotorcyclesFilterDto getMotorcyclesFilterDto)
         {
-            return Ok(_service.GetAll());
+            var motorcycles = _motorcycleService.Get(getMotorcyclesFilterDto);
+
+            if (!motorcycles.Any())
+                return NoContent();
+
+            return Ok(motorcycles);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] MotorcycleDto motorcycleDto)
         {
-            await _service.AddAsync(new Motorcycle
-            {
-                LicensePlate = motorcycleDto.LicensePlate,
-                Model = motorcycleDto.Model,
-                Year = motorcycleDto.Year
-            });
+            await _motorcycleService.AddMotorcycle(motorcycleDto);
 
             return Ok();
         }
 
-        [HttpPatch]
+        [HttpPatch("UpdateLicensePlate")]
         public async Task<IActionResult> UpdateLicensePlate(UpdateLicensePlateRequest updateLicensePlateRequest)
         {
-            await _service.UpdateLicensePlate(updateLicensePlateRequest);
+            await _motorcycleService.UpdateLicensePlate(updateLicensePlateRequest);
 
             return Ok();
         }
@@ -48,7 +45,7 @@ namespace MotorRental.WebApi.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            await _service.DeleteByIdAsync(id);
+            await _motorcycleService.DeleteByIdAsync(id);
 
             return Ok();
         }

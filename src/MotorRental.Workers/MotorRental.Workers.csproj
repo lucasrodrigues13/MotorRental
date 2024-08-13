@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-MotorRental.Workers-0949fad8-b838-41a3-b69f-e780ebe71cf4</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MotorRental.Application\MotorRental.Application.csproj" />
+    <ProjectReference Include="..\MotorRental.Domain\MotorRental.Domain.csproj" />
+    <ProjectReference Include="..\MotorRental.Infrastructure\MotorRental.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,4 +1,5 @@
 ﻿using MotorRental.Domain.Constants;
+using Newtonsoft.Json;
 
 namespace MotorRental.Application.Common
 {
@@ -9,7 +10,7 @@ namespace MotorRental.Application.Common
             Success = success;
             Message = message;
             Data = data;
-            Errors = errors ?? [];
+            Errors = errors;
         }
 
         public bool Success { get; }

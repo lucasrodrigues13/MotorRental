@@ -5,7 +5,8 @@ namespace MotorRental.Application.Interfaces
 {
     public interface IMotorcycleService : IBaseService<Motorcycle>
     {
-        Task<IEnumerable<MotorcycleDto>> GetAllWithFilter(GetMotorcyclesFilterDto getMotorcyclesFilterDto);
+        IEnumerable<MotorcycleDto> Get(GetMotorcyclesFilterDto getMotorcyclesFilterDto);
         Task UpdateLicensePlate(UpdateLicensePlateRequest updateLicensePlateRequest);
+        Task AddMotorcycle(MotorcycleDto motorcycleDto);
     }
 }

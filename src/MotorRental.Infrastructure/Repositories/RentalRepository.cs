@@ -4,7 +4,10 @@ using MotorRental.Infrastructure.Data;
 
 namespace MotorRental.Infrastructure.Repositories
 {
-    public class RentalRepository(ApplicationDbContext context) : BaseRepository<Rental>(context), IRentalRepository
+    public class RentalRepository : BaseRepository<Rental>, IRentalRepository
     {
+        public RentalRepository(ApplicationDbContext context) : base(context)
+        {
+        }
     }
 }

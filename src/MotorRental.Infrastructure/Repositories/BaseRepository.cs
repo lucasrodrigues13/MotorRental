@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MotorRental.Domain.Entities;
 using MotorRental.Domain.Interfaces;
 using MotorRental.Infrastructure.Data;
 
 namespace MotorRental.Infrastructure.Repositories
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
         private readonly ApplicationDbContext _databaseContext;
         private readonly DbSet<T> _dbSet;
@@ -15,10 +16,12 @@ namespace MotorRental.Infrastructure.Repositories
             _dbSet = context.Set<T>();
         }
 
-        public async Task AddAsync(T entity)
+        public async Task<T> AddAsync(T entity, string? createdBy = null)
         {
+            entity.CreatedBy = createdBy;
             await _dbSet.AddAsync(entity);
             await SaveAsync();
+            return entity;
         }
 
         public async Task DeleteByIdAsync(int id)
@@ -41,8 +44,10 @@ namespace MotorRental.Infrastructure.Repositories
             return _dbSet.AsNoTracking().AsQueryable();
         }
 
-        public async Task UpdateAsync(T entity)
+        public async Task UpdateAsync(T entity, string? modifiedBy = null)
         {
+            entity.LastModified = DateTime.UtcNow;
+            entity.LastModifiedBy = modifiedBy;
             _dbSet.Update(entity);
             await SaveAsync();
         }

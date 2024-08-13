@@ -4,19 +4,25 @@ using MotorRental.Application.Common;
 
 namespace MotorRental.WebApi.Controllers
 {
+    [ApiController]
     public class ApplicationControllerBase : ControllerBase
     {
-        public OkObjectResult Ok()
+        protected OkObjectResult Ok()
         {
             return Ok(null);
         }
 
-        public override OkObjectResult Ok([ActionResultObjectValue] object? value)
+        protected OkObjectResult Ok([ActionResultObjectValue] object? value)
         {
             return base.Ok(ApiResponse.Ok(value));
         }
 
-        public BadRequestObjectResult BadRequest(List<string> errors)
+        protected BadRequestObjectResult BadRequest(ApiResponse apiResponse)
+        {
+            return base.BadRequest(apiResponse);
+        }
+
+        protected BadRequestObjectResult BadRequest(List<string> errors)
         {
             return base.BadRequest(ApiResponse.BadRequest(errors));
         }

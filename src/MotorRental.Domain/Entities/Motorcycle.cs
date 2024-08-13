@@ -9,5 +9,6 @@ namespace MotorRental.Domain.Entities
         public string LicensePlate { get; set; }
 
         public Rental Rental { get; set; }
+        public MotorcycleNotification MotorcycleNotification { get; set; }
     }
 }

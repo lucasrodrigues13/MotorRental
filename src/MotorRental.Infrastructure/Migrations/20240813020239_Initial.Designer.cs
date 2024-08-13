@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MotorRental.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240812010107_Initial")]
+    [Migration("20240813020239_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -158,15 +158,15 @@ namespace MotorRental.Infrastructure.Migrations
                         {
                             Id = "admin-user-id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ed95d78b-96d8-4402-b0f0-3ef084636d9e",
+                            ConcurrencyStamp = "f0fac495-d3be-4e7f-bd49-fbe3c0de311d",
                             Email = "admin@motorrental.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@MOTORRENTAL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAENf/dgrjXudMdCeIeepUcFlPkXz7M9DLzU8wKOBqhRPJBUValln6K1AZtFw4KUj1Sw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDtR1G43D3/+ryVmLgrLoP8m2D5Ko1meaCwIYqvMq62VaN7OyhkesjFHJUcS1FgH4Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4bd6661f-45d3-45ba-a694-ba4f4cdc0322",
+                            SecurityStamp = "b9a7c756-9622-4bda-9e43-336fcd1a413a",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -277,7 +277,7 @@ namespace MotorRental.Infrastructure.Migrations
                         .HasColumnType("character varying(14)");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
@@ -297,7 +297,7 @@ namespace MotorRental.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
@@ -333,13 +333,13 @@ namespace MotorRental.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
@@ -365,6 +365,25 @@ namespace MotorRental.Infrastructure.Migrations
                     b.ToTable("Motorcycles");
                 });
 
+            modelBuilder.Entity("MotorRental.Domain.Entities.MotorcycleNotification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MotorcycleId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MotorcycleId")
+                        .IsUnique();
+
+                    b.ToTable("MotorcycleNotification");
+                });
+
             modelBuilder.Entity("MotorRental.Domain.Entities.Plan", b =>
                 {
                     b.Property<int>("Id")
@@ -374,7 +393,7 @@ namespace MotorRental.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
@@ -383,7 +402,7 @@ namespace MotorRental.Infrastructure.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
@@ -400,7 +419,7 @@ namespace MotorRental.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3844),
+                            Created = new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(2990),
                             CreatedBy = "admin-user-id",
                             DailyPrice = 30m,
                             NumberOfDays = 7
@@ -408,7 +427,7 @@ namespace MotorRental.Infrastructure.Migrations
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3863),
+                            Created = new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3010),
                             CreatedBy = "admin-user-id",
                             DailyPrice = 28m,
                             NumberOfDays = 15
@@ -416,7 +435,7 @@ namespace MotorRental.Infrastructure.Migrations
                         new
                         {
                             Id = 3,
-                            Created = new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3865),
+                            Created = new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3011),
                             CreatedBy = "admin-user-id",
                             DailyPrice = 22m,
                             NumberOfDays = 30
@@ -424,7 +443,7 @@ namespace MotorRental.Infrastructure.Migrations
                         new
                         {
                             Id = 4,
-                            Created = new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3866),
+                            Created = new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3012),
                             CreatedBy = "admin-user-id",
                             DailyPrice = 20m,
                             NumberOfDays = 45
@@ -432,7 +451,7 @@ namespace MotorRental.Infrastructure.Migrations
                         new
                         {
                             Id = 5,
-                            Created = new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3867),
+                            Created = new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3013),
                             CreatedBy = "admin-user-id",
                             DailyPrice = 18m,
                             NumberOfDays = 50
@@ -448,7 +467,7 @@ namespace MotorRental.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
@@ -463,7 +482,7 @@ namespace MotorRental.Infrastructure.Migrations
                         .HasColumnType("date");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
@@ -538,24 +557,35 @@ namespace MotorRental.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MotorRental.Domain.Entities.MotorcycleNotification", b =>
+                {
+                    b.HasOne("MotorRental.Domain.Entities.Motorcycle", "Motorcycle")
+                        .WithOne("MotorcycleNotification")
+                        .HasForeignKey("MotorRental.Domain.Entities.MotorcycleNotification", "MotorcycleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Motorcycle");
+                });
+
             modelBuilder.Entity("MotorRental.Domain.Entities.Rental", b =>
                 {
                     b.HasOne("MotorRental.Domain.Entities.DeliverDriver", "DeliverDriver")
                         .WithOne("Rental")
                         .HasForeignKey("MotorRental.Domain.Entities.Rental", "MotorcycleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.HasOne("MotorRental.Domain.Entities.Motorcycle", "Motorcycle")
                         .WithOne("Rental")
                         .HasForeignKey("MotorRental.Domain.Entities.Rental", "MotorcycleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.HasOne("MotorRental.Domain.Entities.Plan", "Plan")
                         .WithMany("Rentals")
                         .HasForeignKey("PlanId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("DeliverDriver");
@@ -573,6 +603,9 @@ namespace MotorRental.Infrastructure.Migrations
 
             modelBuilder.Entity("MotorRental.Domain.Entities.Motorcycle", b =>
                 {
+                    b.Navigation("MotorcycleNotification")
+                        .IsRequired();
+
                     b.Navigation("Rental")
                         .IsRequired();
                 });

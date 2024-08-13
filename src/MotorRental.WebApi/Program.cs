@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MotorRental.WebApi.Filters;
 using Serilog;
 using Serilog.Extensions.Logging;
 using System.Text;
-using Microsoft.Extensions.Configuration;
-using MotorRental.WebApi.Filters;
 
 namespace MotorRental.WebApi
 {
@@ -14,19 +13,19 @@ namespace MotorRental.WebApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers(options => options.Filters.Add<ExceptionFilter>());
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            //Adding MotorRental interfaces and configuring the get started.
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddServices();
             builder.Services.AddAuthorization();
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -38,7 +37,7 @@ namespace MotorRental.WebApi
                         ValidAudience = builder.Configuration["Jwt:Issuer"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                     };
-                }).AddCookie();
+                }).AddCookie("Identity.Application");
             builder.Services.AddSingleton<ILoggerProvider>(sp =>
             {
                 var logger = new LoggerConfiguration()
@@ -58,8 +57,8 @@ namespace MotorRental.WebApi
             }
 
             app.UseHttpsRedirection();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.MapControllers();
 
             app.Run();

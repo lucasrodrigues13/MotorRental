@@ -10,14 +10,13 @@ namespace MotorRental.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<TEntity> builder)
         {
             builder.HasKey(u => u.Id);
-            builder.Property(u => u.Created).IsRequired().HasColumnType("date");
-            builder.Property(u => u.LastModified).IsRequired(false).HasColumnType("date");
+            builder.Property(u => u.Created).IsRequired();
+            builder.Property(u => u.LastModified).IsRequired(false);
             builder.Property(u => u.CreatedBy).IsRequired(false);
             builder.Property(u => u.LastModifiedBy).IsRequired(false);
             ConfigureEntity(builder);
         }
 
         public abstract void ConfigureEntity(EntityTypeBuilder<TEntity> builder);
-
     }
 }

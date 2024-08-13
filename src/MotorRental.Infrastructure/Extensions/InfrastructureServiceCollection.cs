@@ -16,6 +16,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
+            var motorcycleNotificationQueueSettings = configuration.GetSection("RabbitMQ").Get<MotorcycleNotificationQueueSettings>();
+            services.AddSingleton(motorcycleNotificationQueueSettings);
+
             services.AddIdentityCore<IdentityUser>(options =>
             {
                 options.Password.RequiredLength = 8;
@@ -33,12 +36,12 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IDeliverDriverRepository, DeliverDriverRepository>();
             services.AddScoped<IMotorcyleRepository, MotorcyleRepository>();
             services.AddScoped<IPlanRepository, PlanRepository>();
-            services.AddScoped<IRentalRepository, RentalRepository>();
+            services.AddScoped<IRentalRepository, RentalRepository>(); 
 
             services.AddDefaultAWSOptions(configuration.GetAWSOptions());
             services.AddAWSService<IAmazonS3>();
             services.AddSingleton<IAwsS3Service, AwsS3Service>();
-            services.AddScoped<IMessagingService, RabbitMqService>();
+            services.AddTransient<IMessagingService, RabbitMqService>();
 
             return services;
         }

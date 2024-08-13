@@ -67,9 +67,9 @@ namespace MotorRental.Infrastructure.Migrations
                     LicenseDriverImagePath = table.Column<string>(type: "text", nullable: true),
                     IdentityUserId = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Created = table.Column<DateTime>(type: "date", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "date", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -86,9 +86,9 @@ namespace MotorRental.Infrastructure.Migrations
                     Year = table.Column<int>(type: "integer", nullable: false),
                     Model = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     LicensePlate = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Created = table.Column<DateTime>(type: "date", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "date", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -104,9 +104,9 @@ namespace MotorRental.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     NumberOfDays = table.Column<int>(type: "integer", maxLength: 200, nullable: false),
                     DailyPrice = table.Column<decimal>(type: "numeric", nullable: false),
-                    Created = table.Column<DateTime>(type: "date", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "date", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -221,6 +221,25 @@ namespace MotorRental.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MotorcycleNotification",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MotorcycleId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MotorcycleNotification", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MotorcycleNotification_Motorcycles_MotorcycleId",
+                        column: x => x.MotorcycleId,
+                        principalTable: "Motorcycles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Rentals",
                 columns: table => new
                 {
@@ -232,9 +251,9 @@ namespace MotorRental.Infrastructure.Migrations
                     DeliverDriverId = table.Column<int>(type: "integer", nullable: false),
                     PlanId = table.Column<int>(type: "integer", nullable: false),
                     MotorcycleId = table.Column<int>(type: "integer", nullable: false),
-                    Created = table.Column<DateTime>(type: "date", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "date", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -245,19 +264,19 @@ namespace MotorRental.Infrastructure.Migrations
                         column: x => x.MotorcycleId,
                         principalTable: "DeliveryDrivers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Rentals_Motorcycles_MotorcycleId",
                         column: x => x.MotorcycleId,
                         principalTable: "Motorcycles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Rentals_Plans_PlanId",
                         column: x => x.PlanId,
                         principalTable: "Plans",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.InsertData(
@@ -272,18 +291,18 @@ namespace MotorRental.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "admin-user-id", 0, "ed95d78b-96d8-4402-b0f0-3ef084636d9e", "admin@motorrental.com", true, false, null, "ADMIN@MOTORRENTAL.COM", "ADMIN", "AQAAAAIAAYagAAAAENf/dgrjXudMdCeIeepUcFlPkXz7M9DLzU8wKOBqhRPJBUValln6K1AZtFw4KUj1Sw==", null, false, "4bd6661f-45d3-45ba-a694-ba4f4cdc0322", false, "admin" });
+                values: new object[] { "admin-user-id", 0, "f0fac495-d3be-4e7f-bd49-fbe3c0de311d", "admin@motorrental.com", true, false, null, "ADMIN@MOTORRENTAL.COM", "ADMIN", "AQAAAAIAAYagAAAAEDtR1G43D3/+ryVmLgrLoP8m2D5Ko1meaCwIYqvMq62VaN7OyhkesjFHJUcS1FgH4Q==", null, false, "b9a7c756-9622-4bda-9e43-336fcd1a413a", false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "Plans",
                 columns: new[] { "Id", "Created", "CreatedBy", "DailyPrice", "LastModified", "LastModifiedBy", "NumberOfDays" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3844), "admin-user-id", 30m, null, null, 7 },
-                    { 2, new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3863), "admin-user-id", 28m, null, null, 15 },
-                    { 3, new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3865), "admin-user-id", 22m, null, null, 30 },
-                    { 4, new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3866), "admin-user-id", 20m, null, null, 45 },
-                    { 5, new DateTime(2024, 8, 11, 22, 1, 7, 111, DateTimeKind.Local).AddTicks(3867), "admin-user-id", 18m, null, null, 50 }
+                    { 1, new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(2990), "admin-user-id", 30m, null, null, 7 },
+                    { 2, new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3010), "admin-user-id", 28m, null, null, 15 },
+                    { 3, new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3011), "admin-user-id", 22m, null, null, 30 },
+                    { 4, new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3012), "admin-user-id", 20m, null, null, 45 },
+                    { 5, new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3013), "admin-user-id", 18m, null, null, 50 }
                 });
 
             migrationBuilder.InsertData(
@@ -341,6 +360,12 @@ namespace MotorRental.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_MotorcycleNotification_MotorcycleId",
+                table: "MotorcycleNotification",
+                column: "MotorcycleId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Motorcycles_LicensePlate",
                 table: "Motorcycles",
                 column: "LicensePlate",
@@ -375,6 +400,9 @@ namespace MotorRental.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "MotorcycleNotification");
 
             migrationBuilder.DropTable(
                 name: "Rentals");
