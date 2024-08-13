@@ -4,7 +4,7 @@ using MotorRental.Domain.Dtos;
 
 namespace MotorRental.WebApi.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class MotorcycleController : ApplicationControllerBase

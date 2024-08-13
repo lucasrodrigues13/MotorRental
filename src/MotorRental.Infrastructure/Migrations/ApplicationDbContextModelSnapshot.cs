@@ -50,13 +50,13 @@ namespace MotorRental.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "admin-role-id",
+                            Id = "c913f552-8f32-40db-9676-5b9a77bc2a26",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "driver-role-id",
+                            Id = "82bcaecf-5172-4d82-9efb-559fd0101885",
                             Name = "DeliverDriver",
                             NormalizedName = "DELIVERDRIVER"
                         });
@@ -153,17 +153,17 @@ namespace MotorRental.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "admin-user-id",
+                            Id = "a213286b-c623-4b76-93e0-3557ba81c917",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f0fac495-d3be-4e7f-bd49-fbe3c0de311d",
+                            ConcurrencyStamp = "a67f558b-375b-4887-aafc-a6f42344ab4b",
                             Email = "admin@motorrental.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@MOTORRENTAL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDtR1G43D3/+ryVmLgrLoP8m2D5Ko1meaCwIYqvMq62VaN7OyhkesjFHJUcS1FgH4Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHSRHFVr5zOTt+G5JZHyhe/Uoghy2OAGjpXz1m+Tt8ecCS6hHCTDfdXAsIkevYYmQg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b9a7c756-9622-4bda-9e43-336fcd1a413a",
+                            SecurityStamp = "c6a5d6d4-26d5-451d-873d-8bea657c3d7b",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -233,8 +233,8 @@ namespace MotorRental.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "admin-user-id",
-                            RoleId = "admin-role-id"
+                            UserId = "a213286b-c623-4b76-93e0-3557ba81c917",
+                            RoleId = "c913f552-8f32-40db-9676-5b9a77bc2a26"
                         });
                 });
 
@@ -416,40 +416,40 @@ namespace MotorRental.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(2990),
-                            CreatedBy = "admin-user-id",
+                            Created = new DateTime(2024, 8, 13, 12, 1, 45, 163, DateTimeKind.Local).AddTicks(3612),
+                            CreatedBy = "a213286b-c623-4b76-93e0-3557ba81c917",
                             DailyPrice = 30m,
                             NumberOfDays = 7
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3010),
-                            CreatedBy = "admin-user-id",
+                            Created = new DateTime(2024, 8, 13, 12, 1, 45, 163, DateTimeKind.Local).AddTicks(3632),
+                            CreatedBy = "a213286b-c623-4b76-93e0-3557ba81c917",
                             DailyPrice = 28m,
                             NumberOfDays = 15
                         },
                         new
                         {
                             Id = 3,
-                            Created = new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3011),
-                            CreatedBy = "admin-user-id",
+                            Created = new DateTime(2024, 8, 13, 12, 1, 45, 163, DateTimeKind.Local).AddTicks(3633),
+                            CreatedBy = "a213286b-c623-4b76-93e0-3557ba81c917",
                             DailyPrice = 22m,
                             NumberOfDays = 30
                         },
                         new
                         {
                             Id = 4,
-                            Created = new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3012),
-                            CreatedBy = "admin-user-id",
+                            Created = new DateTime(2024, 8, 13, 12, 1, 45, 163, DateTimeKind.Local).AddTicks(3635),
+                            CreatedBy = "a213286b-c623-4b76-93e0-3557ba81c917",
                             DailyPrice = 20m,
                             NumberOfDays = 45
                         },
                         new
                         {
                             Id = 5,
-                            Created = new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3013),
-                            CreatedBy = "admin-user-id",
+                            Created = new DateTime(2024, 8, 13, 12, 1, 45, 163, DateTimeKind.Local).AddTicks(3636),
+                            CreatedBy = "a213286b-c623-4b76-93e0-3557ba81c917",
                             DailyPrice = 18m,
                             NumberOfDays = 50
                         });
@@ -478,6 +478,9 @@ namespace MotorRental.Infrastructure.Migrations
                     b.Property<DateTime?>("ExpectedEndDate")
                         .HasColumnType("date");
 
+                    b.Property<decimal?>("ExpectedPrice")
+                        .HasColumnType("numeric");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
@@ -489,6 +492,9 @@ namespace MotorRental.Infrastructure.Migrations
 
                     b.Property<int>("PlanId")
                         .HasColumnType("integer");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("date");

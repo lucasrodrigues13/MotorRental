@@ -248,6 +248,8 @@ namespace MotorRental.Infrastructure.Migrations
                     StartDate = table.Column<DateTime>(type: "date", nullable: false),
                     ExpectedEndDate = table.Column<DateTime>(type: "date", nullable: true),
                     EndDate = table.Column<DateTime>(type: "date", nullable: true),
+                    Price = table.Column<decimal>(type: "numeric", nullable: true),
+                    ExpectedPrice = table.Column<decimal>(type: "numeric", nullable: true),
                     DeliverDriverId = table.Column<int>(type: "integer", nullable: false),
                     PlanId = table.Column<int>(type: "integer", nullable: false),
                     MotorcycleId = table.Column<int>(type: "integer", nullable: false),
@@ -284,31 +286,31 @@ namespace MotorRental.Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "admin-role-id", null, "Admin", "ADMIN" },
-                    { "driver-role-id", null, "DeliverDriver", "DELIVERDRIVER" }
+                    { "82bcaecf-5172-4d82-9efb-559fd0101885", null, "DeliverDriver", "DELIVERDRIVER" },
+                    { "c913f552-8f32-40db-9676-5b9a77bc2a26", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "admin-user-id", 0, "f0fac495-d3be-4e7f-bd49-fbe3c0de311d", "admin@motorrental.com", true, false, null, "ADMIN@MOTORRENTAL.COM", "ADMIN", "AQAAAAIAAYagAAAAEDtR1G43D3/+ryVmLgrLoP8m2D5Ko1meaCwIYqvMq62VaN7OyhkesjFHJUcS1FgH4Q==", null, false, "b9a7c756-9622-4bda-9e43-336fcd1a413a", false, "admin" });
+                values: new object[] { "a213286b-c623-4b76-93e0-3557ba81c917", 0, "a67f558b-375b-4887-aafc-a6f42344ab4b", "admin@motorrental.com", true, false, null, "ADMIN@MOTORRENTAL.COM", "ADMIN", "AQAAAAIAAYagAAAAEHSRHFVr5zOTt+G5JZHyhe/Uoghy2OAGjpXz1m+Tt8ecCS6hHCTDfdXAsIkevYYmQg==", null, false, "c6a5d6d4-26d5-451d-873d-8bea657c3d7b", false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "Plans",
                 columns: new[] { "Id", "Created", "CreatedBy", "DailyPrice", "LastModified", "LastModifiedBy", "NumberOfDays" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(2990), "admin-user-id", 30m, null, null, 7 },
-                    { 2, new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3010), "admin-user-id", 28m, null, null, 15 },
-                    { 3, new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3011), "admin-user-id", 22m, null, null, 30 },
-                    { 4, new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3012), "admin-user-id", 20m, null, null, 45 },
-                    { 5, new DateTime(2024, 8, 12, 23, 2, 39, 198, DateTimeKind.Local).AddTicks(3013), "admin-user-id", 18m, null, null, 50 }
+                    { 1, new DateTime(2024, 8, 13, 12, 1, 45, 163, DateTimeKind.Local).AddTicks(3612), "a213286b-c623-4b76-93e0-3557ba81c917", 30m, null, null, 7 },
+                    { 2, new DateTime(2024, 8, 13, 12, 1, 45, 163, DateTimeKind.Local).AddTicks(3632), "a213286b-c623-4b76-93e0-3557ba81c917", 28m, null, null, 15 },
+                    { 3, new DateTime(2024, 8, 13, 12, 1, 45, 163, DateTimeKind.Local).AddTicks(3633), "a213286b-c623-4b76-93e0-3557ba81c917", 22m, null, null, 30 },
+                    { 4, new DateTime(2024, 8, 13, 12, 1, 45, 163, DateTimeKind.Local).AddTicks(3635), "a213286b-c623-4b76-93e0-3557ba81c917", 20m, null, null, 45 },
+                    { 5, new DateTime(2024, 8, 13, 12, 1, 45, 163, DateTimeKind.Local).AddTicks(3636), "a213286b-c623-4b76-93e0-3557ba81c917", 18m, null, null, 50 }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "admin-role-id", "admin-user-id" });
+                values: new object[] { "c913f552-8f32-40db-9676-5b9a77bc2a26", "a213286b-c623-4b76-93e0-3557ba81c917" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

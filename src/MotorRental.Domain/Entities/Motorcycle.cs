@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace MotorRental.Domain.Entities
+﻿namespace MotorRental.Domain.Entities
 {
     public class Motorcycle : BaseEntity
     {

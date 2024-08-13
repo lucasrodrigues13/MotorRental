@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MotorRental.Domain.Constants;
 using MotorRental.Domain.Entities;
+using MotorRental.Infrastructure.Configuration;
 using MotorRental.Infrastructure.Configurations;
 
 namespace MotorRental.Infrastructure.Data
@@ -22,25 +23,24 @@ namespace MotorRental.Infrastructure.Data
             builder.ApplyConfiguration(new MotorcycleConfiguration());
             builder.ApplyConfiguration(new PlanConfiguration());
             builder.ApplyConfiguration(new RentalConfiguration());
+            builder.ApplyConfiguration(new MotorcycleNotificationConfiguration());
 
-            builder.Entity<IdentityRole>().HasData(
-                new IdentityRole
-                {
-                    Id = MotorRentalIdentityConstants.ADMIN_ROLE_ID,
-                    Name = MotorRentalIdentityConstants.ADMIN_ROLE_NAME,
-                    NormalizedName = MotorRentalIdentityConstants.ADMIN_ROLE_NORMALIZED_NAME
-                },
-                new IdentityRole
-                {
-                    Id = MotorRentalIdentityConstants.DELIVER_DRIVER_ROLE_ID,
-                    Name = MotorRentalIdentityConstants.DELIVER_DRIVER_ROLE_NAME,
-                    NormalizedName = MotorRentalIdentityConstants.DELIVER_DRIVER_ROLE_NORMALIZED_NAME
-                }
-            );
+            var roleAdmin = new IdentityRole
+            {
+                Name = MotorRentalIdentityConstants.ADMIN_ROLE_NAME,
+                NormalizedName = MotorRentalIdentityConstants.ADMIN_ROLE_NORMALIZED_NAME
+            };
+
+            var roleDeliverDriver = new IdentityRole
+            {
+                Name = MotorRentalIdentityConstants.DELIVER_DRIVER_ROLE_NAME,
+                NormalizedName = MotorRentalIdentityConstants.DELIVER_DRIVER_ROLE_NORMALIZED_NAME
+            };
+
+            builder.Entity<IdentityRole>().HasData(roleAdmin, roleDeliverDriver);
 
             var adminUser = new IdentityUser
             {
-                Id = MotorRentalIdentityConstants.ADMIN_USER_ID,
                 UserName = MotorRentalIdentityConstants.ADMIN_USERNAME_DEFAULT,
                 NormalizedUserName = MotorRentalIdentityConstants.ADMIN_NORMALIZED_USERNAME_DEFAULT,
                 Email = MotorRentalIdentityConstants.ADMIN_USER_EMAIL_DEFAULT,
@@ -55,7 +55,7 @@ namespace MotorRental.Infrastructure.Data
                 new IdentityUserRole<string>
                 {
                     UserId = adminUser.Id,
-                    RoleId = MotorRentalIdentityConstants.ADMIN_ROLE_ID
+                    RoleId = roleAdmin.Id
                 }
             );
 

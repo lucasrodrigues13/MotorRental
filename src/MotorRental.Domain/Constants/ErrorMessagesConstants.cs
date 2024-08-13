@@ -20,5 +20,6 @@
 
         public const string RENTAL_DOESNT_EXIST = "The reported rent does not exist.";
 
+        public const string ROLE_DOESNT_EXIST = "The role reported does not exist.";
     }
 }
